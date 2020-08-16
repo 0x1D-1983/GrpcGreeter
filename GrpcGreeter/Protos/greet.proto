@@ -8,6 +8,7 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply);
   rpc SayHellos (HelloRequest) returns (stream HelloReply);
   rpc SayHelloCounter (stream HelloCounterRequest) returns (HelloCounterResponse);
+  rpc SayHelloEcho (stream HelloEcho) returns (stream HelloEcho);
 }
 
 message HelloRequest {
@@ -15,6 +16,10 @@ message HelloRequest {
 }
 
 message HelloReply {
+  string message = 1;
+}
+
+message HelloEcho {
   string message = 1;
 }
 

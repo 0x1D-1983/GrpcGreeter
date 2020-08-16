@@ -56,5 +56,24 @@ namespace GrpcGreeter
                 Count = _counter.Count
             };
         }
+
+        public override async Task SayHelloEcho(IAsyncStreamReader<HelloEcho> requestStream, IServerStreamWriter<HelloEcho> responseStream, ServerCallContext context)
+        {
+            var rnd = new Random();
+
+            while (!context.CancellationToken.IsCancellationRequested)
+            {
+                await foreach (var request in requestStream.ReadAllAsync())
+                {
+                    // Gotta look busy
+                    await Task.Delay(rnd.Next(1000));
+
+                    await responseStream.WriteAsync(new HelloEcho
+                    {
+                        Message = $"Echoed from server: {request.Message}"
+                    });
+                }
+            }
+        }
     }
 }
