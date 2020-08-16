@@ -22,5 +22,22 @@ namespace GrpcGreeter
                 Message = $"Hello {request.Name}!"
             });
         }
+
+        public override async Task SayHellos(HelloRequest request, IServerStreamWriter<HelloReply> responseStream, ServerCallContext context)
+        {
+            var i = 0;
+            var rnd = new Random();
+
+            while (!context.CancellationToken.IsCancellationRequested)
+            {
+                var message = $"How are you {request.Name}? {++i}";
+                _logger.LogInformation($"Sending greeting {message}.");
+
+                await responseStream.WriteAsync(new HelloReply { Message = message });
+
+                // Gotta look busy
+                await Task.Delay(rnd.Next(1000));
+            }
+        }
     }
 }
