@@ -29,20 +29,52 @@ namespace GrpcGreeterClient
             #endregion
 
             #region server streaming
-            using var channel = GrpcChannel.ForAddress("http://localhost:5000");
+            //using var channel = GrpcChannel.ForAddress("http://localhost:5000");
 
+            //var client = new Greeter.GreeterClient(channel);
+            //var call = client.SayHellos(new HelloRequest
+            //{
+            //    Name = "Janos"
+            //});
+
+            //await foreach (var response in call.ResponseStream.ReadAllAsync())
+            //{
+            //    Console.WriteLine($"Greeting: {response.Message}");
+            //}
+
+            //Console.ReadKey();
+            #endregion
+
+            #region client streaming
+            var channel = GrpcChannel.ForAddress("http://localhost:5000");
             var client = new Greeter.GreeterClient(channel);
-            var call = client.SayHellos(new HelloRequest
-            {
-                Name = "Janos"
-            });
+            using var call = client.SayHelloCounter();
 
-            await foreach (var response in call.ResponseStream.ReadAllAsync())
+            var rnd = new Random();
+
+            for (int i = 0; i < 3; i++)
             {
-                Console.WriteLine($"Greeting: {response.Message}");
+                int times = rnd.Next(10);
+
+                await Task.Delay(rnd.Next(1000));
+
+                var msg = new HelloCounterRequest
+                {
+                    Message = $"Love you {times} times!",
+                    MessageCount = times
+                };
+
+                Console.WriteLine($"Sending message: {msg.Message}");
+
+                await call.RequestStream.WriteAsync(msg);
             }
 
-            Console.ReadKey();
+            await call.RequestStream.CompleteAsync();
+
+            var response = await call;
+
+            Console.WriteLine($"Greeting sent {response.Count} times.");
+
             #endregion
 
 

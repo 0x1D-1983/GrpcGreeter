@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
+using GrpcGreeter.Services;
 using Microsoft.Extensions.Logging;
 
 namespace GrpcGreeter
@@ -10,9 +11,12 @@ namespace GrpcGreeter
     public class GreeterService : Greeter.GreeterBase
     {
         private readonly ILogger<GreeterService> _logger;
-        public GreeterService(ILogger<GreeterService> logger)
+        private readonly IGreeterCounter _counter;
+
+        public GreeterService(ILogger<GreeterService> logger, IGreeterCounter counter)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _counter = counter ?? throw new ArgumentNullException(nameof(counter));
         }
 
         public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
@@ -38,6 +42,19 @@ namespace GrpcGreeter
                 // Gotta look busy
                 await Task.Delay(rnd.Next(1000));
             }
+        }
+
+        public override async Task<HelloCounterResponse> SayHelloCounter(IAsyncStreamReader<HelloCounterRequest> requestStream, ServerCallContext context)
+        {
+            await foreach (var request in requestStream.ReadAllAsync())
+            {
+                _counter.Increment(request.MessageCount);
+            }
+
+            return new HelloCounterResponse
+            {
+                Count = _counter.Count
+            };
         }
     }
 }

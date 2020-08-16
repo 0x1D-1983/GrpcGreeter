@@ -1,11 +1,11 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcGreeter", "GrpcGreeter.csproj", "{0101B83C-D829-4181-BBDA-CBAFB66FB5BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcGreeter", "GrpcGreeter\GrpcGreeter.csproj", "{0101B83C-D829-4181-BBDA-CBAFB66FB5BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcGreeterClient", "..\GrpcGreeterClient\GrpcGreeterClient.csproj", "{9D3CF57E-8109-4C74-A91A-0981F17FE6A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcGreeterClient", "GrpcGreeterClient\GrpcGreeterClient.csproj", "{9D3CF57E-8109-4C74-A91A-0981F17FE6A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcGreeterApi", "..\GrpcGreeterApi\GrpcGreeterApi.csproj", "{9B705081-06B1-4BDD-A3BF-E6D63AC9E717}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcGreeterApi", "GrpcGreeterApi\GrpcGreeterApi.csproj", "{9B705081-06B1-4BDD-A3BF-E6D63AC9E717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
